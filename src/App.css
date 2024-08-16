@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* App.css */
+body {
+  font-family: 'Orbitron', sans-serif;
+  background: #1a1a1a;
+  color: #e0e0e0;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.text-shadow-md {
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.6);
+}
+
+button {
+  background: linear-gradient(45deg, #00bfae, #00c6ff);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background: linear-gradient(45deg, #00c6ff, #00bfae);
+  transform: scale(1.05);
+}
