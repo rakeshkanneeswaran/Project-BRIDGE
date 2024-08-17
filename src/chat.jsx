@@ -10,25 +10,63 @@ function Chat() {
   const [question, setQuestion] = useState("");
   const [answers, setAnswers] = useState([]);
   const [selectedModel, setSelectedModel] = useState("llava");
+  const [selecteImageBase64, setSelectedImageBase64] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const inputRef = useRef(null);
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      const base64String = reader.result;
+      const base64Data = base64String.replace(
+        /^data:image\/[a-z]+;base64,/,
+        ""
+      );
+      setSelectedImageBase64(base64Data);
+      console.log(base64Data);
+    };
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const response = await axios.post("http://localhost:11434/api/generate", {
-        model: selectedModel,
-        prompt: question,
-        stream: false,
-      });
+      const payload =
+        selectedModel === "llava"
+          ? {
+              model: selectedModel,
+              prompt: question,
+              stream: false,
+              images: [selecteImageBase64],
+            }
+          : {
+              model: selectedModel,
+              prompt: question,
+              stream: false,
+            };
+
+      const response = await axios.post(
+        "http://localhost:11434/api/generate",
+        payload
+      );
+
       const newAnswer = response.data.response;
-      const timestamp = new Date().toLocaleTimeString(); // Add timestamp
+      const timestamp = new Date().toLocaleTimeString();
       setAnswers((prevAnswers) => [
         ...prevAnswers,
-        { text: question, timestamp, type: "question" }, // Add question to answers
-        { text: newAnswer, timestamp, type: "answer" }, // Add answer to answers
+        {
+          text: question,
+          timestamp,
+          type: "question",
+          image: selecteImageBase64,
+        },
+        { text: newAnswer, timestamp, type: "answer" },
       ]);
       setQuestion("");
       inputRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -55,7 +93,7 @@ function Chat() {
             key={index}
             className={`p-4 mb-2 rounded-lg shadow-md transition-colors duration-300 ${
               answer.type === "question"
-                ? "bg-black hover:bg-gray-600"
+                ? "bg-gray-700 hover:bg-gray-600"
                 : "bg-black hover:bg-gray-600"
             }`}
           >
@@ -83,6 +121,13 @@ function Chat() {
                 </div>
               </div>
             </div>
+            {answer.image && (
+              <img
+                src={`data:image/jpeg;base64,${answer.image}`}
+                alt="Uploaded"
+                className="mt-2 rounded-lg max-w-xs"
+              />
+            )}
           </div>
         ))}
         <div ref={inputRef}></div>
@@ -109,15 +154,6 @@ function Chat() {
           >
             {isLoading ? "Processing..." : "Ask"}
           </button>
-          <button
-            type="submit"
-            disabled={isLoading}
-            className={`bg-gradient-to-r from-teal-500 to-cyan-600 text-white rounded-lg px-4 py-2 hover:from-teal-600 hover:to-cyan-700 transition-transform transform ${
-              isLoading ? "cursor-not-allowed opacity-50" : "cursor-pointer"
-            } ${!isLoading && "hover:scale-105"}`}
-          >
-            {"file"}
-          </button>
         </form>
         <button
           onClick={() => setIsModalOpen(true)}
@@ -125,6 +161,7 @@ function Chat() {
         >
           {selectedModel}
         </button>
+        <input type="file" onChange={handleImageUpload} />
       </div>
 
       <ModelSelectModal
