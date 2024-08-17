@@ -6,7 +6,7 @@
     "distDir": "../dist"
   },
   "package": {
-    "productName": "tauri-app",
+    "productName": "BRIDGE",
     "version": "0.1.0"
   },
   "tauri": {
