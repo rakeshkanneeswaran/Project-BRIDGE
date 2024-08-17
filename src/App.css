@@ -28,3 +28,66 @@ button:hover {
   background: linear-gradient(45deg, #00c6ff, #00bfae);
   transform: scale(1.05);
 }
+
+
+/* Loading Screen Styles */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); /* Translucent black background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; /* Ensure it's above other content */
+}
+
+.loading-content {
+  background-color: transparent; /* Transparent background for the loader */
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Premium shadow effect */
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  animation: fadeIn 0.3s ease-in-out; /* Smooth fade-in effect */
+}
+
+.loading-content .loading-dot {
+  height: 20px; /* Larger size for the dots */
+  width: 20px; /* Larger size for the dots */
+  background-color: #fff; /* White color for the dots */
+  border-radius: 50%;
+  animation: bounce 1.2s infinite ease-in-out;
+  margin: 0 8px; /* Space between dots */
+}
+
+.loading-content .loading-dot:nth-child(2) {
+  animation-delay: -0.3s;
+}
+
+.loading-content .loading-dot:nth-child(3) {
+  animation-delay: -0.15s;
+}
+
+/* Bounce Animation */
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-30px); /* Increase bounce height */
+  }
+}
+
+/* Fade In Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

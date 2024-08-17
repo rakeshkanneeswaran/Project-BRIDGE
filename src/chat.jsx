@@ -1,10 +1,10 @@
-import { useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import axios from "axios";
-import Appbar from "../components/Appbar"; // Adjust the import path as needed
-import ModelSelectModal from "../components/modalselect"; // Adjust the import path as needed
+import Appbar from "../components/Appbar"; 
+import ModelSelectModal from "../components/modalselect"; 
 import "./App.css";
-import UserIcon from "../public/userpic.svg"; // Import User Icon
-import AIImage from "../public/rakesh.jpeg"; // Import AI Image
+import UserIcon from "../public/userpic.svg"; 
+import AIImage from "../public/rakesh.jpeg"; 
 
 function Chat() {
   const [question, setQuestion] = useState("");
@@ -82,7 +82,7 @@ function Chat() {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gradient-to-br from-gray-900 to-gray-700 text-gray-200">
+    <div className="relative flex flex-col h-screen bg-gradient-to-br from-gray-900 to-gray-700 text-gray-200">
       <Appbar
         openModelModal={() => setIsModalOpen(true)}
         selectedModel={selectedModel}
@@ -170,6 +170,16 @@ function Chat() {
         selectedModel={selectedModel}
         handleModelChange={handleModelChange}
       />
+
+      {isLoading && (
+        <div className="loading-overlay">
+          <div className="loading-content">
+            <div className="loading-dot"></div>
+            <div className="loading-dot"></div>
+            <div className="loading-dot"></div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
